@@ -1,0 +1,411 @@
+<head>
+    <title>faker</title> 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">    
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <script src="../config.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Chango|Knewave" rel="stylesheet">
+</head>
+<div class="head col align-center" id="head">
+    <label>faker</label>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Redirect Server & Global settings:</h3>
+            <div class="form-group container">
+                <div class="row">
+                    <h5>Server address:</h5></div>
+                <div class="row">
+                    <form action="/setServerAddress" id="setServerAddress" method="post">
+                        <input class="form-control" type="text" id="serverAddress" name="serverAddress" onkeyup='disableButton("#serverAddress", "#submitApplyServerAddress")' placeholder="<%=get_server_address%>" class="serverAddress">
+                </div>
+                <div class="row justify-content-md-center">
+                    <div class="col-md-3 btn-size">
+                        <button class="btn btn-outline-primary btn-block btn-border-left" id="submitApplyServerAddress" type="submit" disabled>
+                            Apply
+                        </button>
+                    </form>
+                    </div>
+                    <div class="col-md-3 btn-size">
+                        <form action="/resetServerAddress" id="resetServerAddress" method="post">
+                            <button class="btn btn-outline-danger btn-block btn-border-right" id="submit" type="submit">
+                                Reset
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <form action="/setGlobalDelay" id="setGlobalDelay" method="post">
+                <div class="form-group container">
+                    <div class="row">
+                        <h5>Global delay:</h5></div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input class="form-control " type="number" id="globalDelayFrom" name="globalDelayFrom" onchange='disableButtonApplyDelay("#globalDelayFrom", "#globalDelayTo", "#submitApplyGlobalDelay")' oninput='checkDelayFrom("#globalDelayFrom", "#globalDelayTo")' value step="1" placeholder="<%= get_global_delay_from%>" pattern="[0-9]" class="gdelay" min="0" data-container="body" data-toggle="popover" data-placement="top" data-content="Сюда пиши текст хинта">
+                        </div>
+                        <div class="col-md-6">
+                            <input class="form-control" type="number" id="globalDelayTo" name="globalDelayTo" value step="1" oninput='disableButtonApplyDelay("#globalDelayFrom", "#globalDelayTo", "#submitApplyGlobalDelay")' placeholder="<%= get_global_delay_to%>" pattern="[0-9]" class="delay" min="0" />
+                        </div>
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-3 btn-size">
+                            <button class="btn btn-outline-primary btn-block btn-border-left" type="submit" id="submitApplyGlobalDelay" disabled>
+                                Apply
+                            </button>
+                        </div>
+                        <div class="col-md-3 btn-size">
+            </form>
+            <form action="/resetGlobalDelay" id="resetGlobalDelay" method="post">
+                <button class="btn btn-outline-danger btn-block btn-border-right" id="submit" type="submit">
+                    Reset
+                </button>
+            </form>
+            </div>
+            </div>
+            </div>
+            <h3>Customized reply:</h3>
+            <form action="/setReply" id="setReply" method="post">
+                <div class="form-group container">
+                    <div class="row">
+                        <h5>Request:</h5></div>
+                    <div class="row">
+                        <textarea class="form-control req-area" id="requestTextArea" type="text" name="request" onkeyup='disableButton("#requestTextArea", "#submitApplyReply")' placeholder="e.g.api/v1/epg/list?lang=en&channelId=21884779&startDate=1507652741&stopDate=150638040" class="request"></textarea>
+                    </div>
+
+                        <div class="col align-right zero-pad text-height acc">
+                                Don't send this request to server:
+                                <input id="dontSendRequest" type="checkbox" name="dontSendRequest" class=""></input>
+                        </div>
+                </div>
+                <div class="form-group container">
+                    <div class="row">
+                        <h5>Custom delay:</h5></div>
+                    <div class="row">
+                        <div class="col btn-size">
+                            <input class="form-control" type="number" name="customDelayFrom" id="customDelayFrom" onchange='disableButtonApplyDelay("#customDelayFrom", "#customDelayTo", "#accumulationDelay")' oninput='checkDelayFrom("#customDelayFrom", "#customDelayTo")' value step="1" placeholder="Ramdomize from" pattern="[0-9]" class="cdelay" min="0">
+                        </div>
+                        <div class="col btn-size">
+                            <input class="form-control" type="number" name="customDelayTo" id="customDelayTo" step="1" placeholder="Ramdomize to" pattern="[0-9]" oninput='disableButtonApplyDelay("#customDelayFrom", "#customDelayTo", "#accumulationDelay")' value class="delay" min="0">
+                        </div>
+                        <div class="col align-right zero-pad text-height acc">
+                                Accumulation delay:
+                                <input id="accumulationDelay" type="checkbox" name="accumulationDelay" class="" disabled></input>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <h5>HTTP code:</h5></div>
+                        <div class="row">
+                            <input class="form-control" type="number" id="httpCode" name="httpCode" step="1" placeholder="e.g. 404" pattern="[0-9]" class="code">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row container size">
+                                <h5>Select content type:</h5></div>
+                            <select class="form-control" type="text" id="contentType" class="content_type" name="contentType">
+                                <option></option>
+                                <option>text/html</option>
+                                <option selected>application/json</option>
+                                <option>application/xml</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row container">
+                                <h5>Or enter custom content type:</h5></div>
+                            <input class="form-control" type="text" id="customContentType" name="customContentType" placeholder="application/xhtml+xml" class="content">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group container">
+                    <div class="row">
+                        <div class="row container">
+                            <h5>Reply:</h5>
+                        </div>
+                        <select class="form-control" type="text" class="reply" name="replyType" id="replyType" onchange="monitorSelectReplyType()">
+                            <option>As Is</option>
+                            <option>Merge json</option>
+                            <option selected>Fake json</option>
+                            <option>Do not fake response</option>
+                            <option>Delete json params</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group container">
+                <div>
+                    <div class="row">
+                    <textarea class="form-control req-area" type="text" placeholder="Enter pair(s) {key:value} for search editing part of json" id="FindEditingPart" name="findEditingPart" style="display: none;"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <textarea class="form-control req-area" type="text" name="reply" placeholder="Enter fake data" id="textReply"></textarea>
+                    </div>
+                </div>
+                <div class="form-group container">
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-3 btn-size">
+                            <button class="btn btn-outline-primary btn-block btn-border-left" id="submitApplyReply" type="submit" disabled>
+                                Apply
+                            </button>
+                        </div>
+            </form>
+                <div class="col-md-3 btn-size">
+                   <form action="/validateJson" id="validateJson" method="post">
+                                <button class="btn btn-outline-success btn-block btn-border-all" type="submit">
+                                    Validate JSON
+                                </button>  
+                                   
+                    </form>
+                </div>
+
+
+            <div class="col-md-3 btn-size">
+                <form action="/resetReply" id="resetReply" method="post">
+                    <button class="btn btn-outline-danger btn-block btn-border-right" id="submit" type="submit" class="longbutton">
+                        Reset
+                    </button>
+                </form>
+            </div>
+            </div>
+            </div>
+            <div class="row"></div>
+            <div class="form-group container">
+                <h3>Upload file:</h3>
+                <div class="row">
+                    <form action="/saveFakeFile" id="saveFakeFile" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-xl">
+                                <div class="custom-file">
+                                    <input id="uploadFile" type="file" name="file" class="custom-file-input" onchange="getNameFakeFile(this.value);">
+                                    <label class="custom-file-label" for="customFile" id="fakeFileLoad">Choose file</label>
+                                </div>
+                            </div>
+                            <div class="col align-left">
+                                <button class="btn btn-outline-primary" id="submitUploadFile" type="submit" class="uploadButton">Upload file</button>
+                            </div>
+                            <div class="col align-right text-height">
+                                It's image?:
+                                <input id="isImage" type="checkbox" name="isImage" class="checkbox" checked="on"></input>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="form-group container">
+                <div class="row">
+                    <div class="col btn-size">
+                        <textarea class="form-control file-area" type="text" name="reply" id="fakeImages" class="fakefiles"><%= get_fake_images%></textarea>
+                    </div>
+                    <div class="col btn-size">
+                        <textarea class="form-control file-area" type="text" name="reply" id="fakeFiles" class="fakefiles"><%= get_fake_files%></textarea>
+                    </div>
+                </div>
+            </div>
+            </form>
+            <div class="form-group container">
+                <div class="row justify-content-around">
+                    <div class="col-md-3 btn-size">
+                        <form action="/resetFakeImages" id="resetFakeImages" method="post">
+                            <button class="btn btn-outline-danger btn-block" id="submit" type="submit" class="longbutton">
+                                Reset
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-3 btn-size">
+                        <form action="/resetFakeFiles" id="resetFakeFiles" method="post">
+                            <button class="btn btn-outline-danger btn-block" id="submit" type="submit" class="longbuttonFakeFiles">
+                                Reset
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box"><h3>Config parameters: <div class="error"></div></h3></div>
+                            <div class="row container">
+                    <h5>Load config from file:</h5></div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xl upload">
+                        <form action="/applyConfigFile" id="applyConfigFile" method="post" enctype="multipart/form-data">
+                                <div class="custom-file">
+                                    <input id="uploadFile" type="file" name="file" class="custom-file-input" onchange="getNameLoadConfig(this.value);">
+                                    <label class="custom-file-label" for="customFile" id="loadConfigFile">Choose file</label>
+                                </div>
+                    </div>
+                    <div class="col align-left">
+                        <button class="btn btn-outline-primary" id="submitUploadFile" type="submit">
+                            Upload file
+                        </button>
+                    </div>
+                    </form>
+                    <div class="col align-right">
+                        <button class="btn btn-outline-info" data-toggle="modal" data-target="#modal" onclick="updateTextAreaInModal()">
+                            Templates
+                        </button>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group container">
+                <div class="row">
+                   
+                        <form action="/applyTextAreaConfig" method="post" id="applyTextAreaConfig">
+                            <textarea class="form-control log-area" id="textareaConfigFile" type="text" name="textConfigFile" placeholder="Config file" onkeyup='disableButton("#textareaConfigFile", "#submitApplyTextAreaConfig")' class="textconf"><%=get_config_json%></textarea>
+                            <div class="row"></div>
+                            <div class="row justify-content-md-center container row-low">
+                                <div class="col btn-size">
+                                    <button class="btn btn-outline-primary btn-block btn-border-left" id="submitApplyTextAreaConfig" type="submit" disabled>
+                                        Apply
+                                    </button>
+                                </div>
+                        </form>
+                        <div class="col btn-size">
+                            <form action="/dowloadFile" method="post">
+                                <button class="btn btn-outline-success btn-block btn-border-all" id="submit" type="submit">
+                                    Download file
+                                </button>  
+                        </div>
+                        </form>
+                         <div class="col btn-size">
+                                <button class="btn btn-outline-info btn-block btn-border-right" data-toggle="modal" data-target="#modal-save-template">
+                                    Save as Template
+                                </button>  
+                        </div>                       
+                       <div class="col-md-12 btn-size">
+                            <form action="/resetAll" id="resetAll" method="post">
+                                <button class="btn btn-outline-danger btn-block" id="submit" type="submit" class="reset">
+                                    Reset All
+                                </button>
+                        </div>
+                        </form>
+
+                        </div>
+                        </form>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <div class="container">
+                        <div class="row">
+                        <div class="col align-left">
+                            <h5 class="modal-tittle" id="modal">Templates</h5>
+                        </div>
+
+                            <div class="col align-right">
+                            <button class="close" type="button" data-dismiss="modal" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xl align-left">
+                                    <form action="/addConfigFile" id="addConfigFile" method="post" enctype="multipart/form-data">
+                                <div class="custom-file">
+                                    <input id="uploadFileModal" type="file" name="file" class="custom-file-input" onchange="getNameTemplateFile(this.value);">
+                                    <label class="custom-file-label" for="customFile" id="loadTemplateFile">Choose file</label>
+                                </div>
+                                </div>
+                                <div class="col change-align-center align-right">
+                                    <button class="btn btn-outline-primary" id="submitAddConfigFile" type="submit">Add new template</button>     
+                                </div>
+                                </form>
+                            </div> 
+                           
+                        </div>
+                        </div>
+
+                        <div class="modal-body">
+                                <div class="container">
+                                    <div class="row justify-content-md-center">
+                                        <div class="col">
+                                            <form action="/setConfigFromTemplate" id="setConfigFromTemplate" method="post">
+                                                <select id="template-select" class="template-select custom-select" size="7"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="container row">
+                                <div class="col align-left zero-pad">
+                                    <button class="btn btn-outline-success btn-block" id="submitApplyConfigTemplate" type="submit">Apply</button>
+                                            </form>  
+                                </div> 
+                                <div class="col zero-pad">  
+                                    <form action="/delConfigFromTemplate" id="delConfigFromTemplate" method="post">
+                                    <button class="btn btn-outline-danger btn-block" id="submitDelConfigTemplate" type="submit">Delete</button>
+                                    </form>   
+                                </div>
+                                <div class="col align-right offset-lg-7"> 
+                                    <button class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+       <div class="modal fade" id="modal-save-template" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <div class="container">
+                        <div class="row">
+                        <div class="col align-left">
+                            <h5 class="modal-tittle" id="modal">Saving new template</h5>
+                        </div>
+
+                            <div class="col align-right">
+                            <button class="close" type="button" data-dismiss="modal" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <form action="/saveAsTemplate" id="saveAsTemplate" method="post">
+                                    <label for="setFileName">Enter the filename:</label>
+                                    <div class="form-row">
+                                    <div class="col-md-9">
+                                    <input id="setFileName" type="text" class="form-control" placeholder="filename.json">
+                                    </div>
+                                    <div class="col align-right change-align-center">
+                                    <button class="btn btn-outline-success" id="saveAsTemplateSubmit" type="submit">Save</button> 
+                                    </div>
+                                    </div>  
+                                    <small id="passwordHelpBlock" class="form-text text-muted">
+                                        Filename, including type (example "config.json")
+                                    </small>  
+                                </div>
+                                </form>
+                            </div> 
+                           
+                        </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
