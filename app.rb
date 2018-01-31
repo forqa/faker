@@ -3,6 +3,7 @@ require 'sinatra/reloader'
 require 'json'
 require 'curb'
 require 'colorize'
+require 'socket'
 require_relative 'response_logic'
 require_relative 'params_manager'
 
